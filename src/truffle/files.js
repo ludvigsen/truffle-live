@@ -1,5 +1,21 @@
 const fs = require('fs');
 
+export function dir(path) {
+  return new Promise((f, r) => {
+    fs.readdir(path, (err, files) => {
+      f(files);
+    });
+  });
+}
+
+export function exists(path) {
+  return new Promise((f, r) => {
+    fs.exists(path, (bool) => {
+      f(bool);
+    });
+  })
+}
+
 export function writeRaw(path, content) {
   return new Promise((f, r) => {
     fs.writeFile(path, content, 'utf8', (err) => {
@@ -23,18 +39,6 @@ export function rmdir(path) {
     });
   });
 };
-
-export function exists(path) {
-  return new Promise((f, r) => {
-    fs.exists(path, (err) => {
-      if (err) {
-        r(err);
-        return;
-      }
-      f(true);
-    });
-  });
-}
 
 export function readdir(path) {
   return new Promise((f, r) => {

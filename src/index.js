@@ -4,15 +4,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-
 import registerTestRPCServiceWorker from './testrpc/registerTestRPCServiceWorker';
+import initFiles from './truffle/init-files';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
 registerTestRPCServiceWorker(() => {
-  console.log('READY');
+  initFiles();
+  //console.log('READY');
 });
 
-setTimeout(() => {
-  require('./truffle/test');
-}, 5000)
+// setTimeout(() => {
+  //require('./truffle/test');
+// }, 5000)
