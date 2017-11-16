@@ -10,15 +10,15 @@ export function dir(path) {
 
 export function exists(path) {
   return new Promise((f, r) => {
-    fs.exists(path, (bool) => {
+    fs.exists(path, bool => {
       f(bool);
     });
-  })
+  });
 }
 
 export function writeRaw(path, content) {
   return new Promise((f, r) => {
-    fs.writeFile(path, content, 'utf8', (err) => {
+    fs.writeFile(path, content, 'utf8', err => {
       if (err) {
         r(err);
         return;
@@ -30,7 +30,7 @@ export function writeRaw(path, content) {
 
 export function rmdir(path) {
   return new Promise((f, r) => {
-    fs.rmdir(path, (err) => {
+    fs.rmdir(path, err => {
       if (err) {
         r(err);
         return;
@@ -38,7 +38,7 @@ export function rmdir(path) {
       f();
     });
   });
-};
+}
 
 export function readdir(path) {
   return new Promise((f, r) => {
@@ -51,7 +51,6 @@ export function readdir(path) {
     });
   });
 }
-
 
 async function recursiveRemoveDir(path) {
   const dirExists = await exists(path);
@@ -67,9 +66,9 @@ async function recursiveRemoveDir(path) {
   }
 }
 
-export const mkdir = (path) => {
+export const mkdir = path => {
   return new Promise((f, r) => {
-    fs.mkdir(path, (err) => {
+    fs.mkdir(path, err => {
       if (err) {
         r(err);
         return;
@@ -79,7 +78,7 @@ export const mkdir = (path) => {
   });
 };
 
-export const readFile = (path) => {
+export const readFile = path => {
   return new Promise((f, r) => {
     fs.readFile(path, 'utf8', (err, res) => {
       if (err) {
@@ -91,7 +90,7 @@ export const readFile = (path) => {
   });
 };
 
-export const writeFile = (file) => {
+export const writeFile = file => {
   console.log('WRITE FILE: ', file.path);
   return writeRaw(file.path, file.content);
 };
