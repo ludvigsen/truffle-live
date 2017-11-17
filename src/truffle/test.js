@@ -35,7 +35,7 @@ async function test() {
             network_id: 42,
             host: `${location.host}${location.pathname}testrpc/`,
             from: accounts[0],
-            port: '',
+            port: window.location.protocol === 'https:' ? 443 : 80,
             gas: 500000,
           },
         },
