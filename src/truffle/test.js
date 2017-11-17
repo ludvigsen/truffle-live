@@ -33,11 +33,12 @@ async function test() {
         networks: {
           dev: {
             network_id: 42,
-            host:
-              `${location.protocol}${location.host}` +
-              `${location.pathname}testrpc/`,
+            host: `${location.pathname}testrpc/`,
+            //host:
+            //`${location.protocol}${location.host}` +
+            //`${location.pathname}testrpc/`,
             from: accounts[0],
-            port: window.location.protocol === 'https:' ? 443 : 80,
+            //port: window.location.protocol === 'https:' ? 443 : 80,
             gas: 500000,
           },
         },
