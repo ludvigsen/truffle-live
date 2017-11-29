@@ -73,9 +73,9 @@ fs.readFile = (path, encoding, cb) => {
   }
   console.log('READING ', path);
   originalReadFile(path, encoding, cb);
-}
+};
 
-fs.readFileSync = (path) => {
+fs.readFileSync = path => {
   console.log('READ FILE SYNC: ', path);
   if (window.currentDir && path.charAt(0) === '.') {
     path = `${window.currentDir}/${path.substr(1)}`;
@@ -87,14 +87,14 @@ fs.readFileSync = (path) => {
     return fileCache[path];
   }
   throw 'No such file or directory';
-}
+};
 
 fsExtra.outputFile = (output_path, content, encoding, cb) => {
   console.log('OUTPUT FILE: ', output_path, content, encoding);
   return fs.writeFile(output_path, content, cb);
 };
 
-const dir = require("node-dir");
+const dir = require('node-dir');
 dir.files = (dir, cb) => {
   fs.readdir(dir, (err, files) => {
     cb(null, files.map(f => `${dir}${f}`));
@@ -106,16 +106,13 @@ console.log('soljson: ', soljson);
 Object.assign(soljson, window.Module);
 console.log('soljson: ', soljson);
 
-process.chdir = (dir) => {
+process.chdir = dir => {
   window.currentDir = dir;
   console.log('CHANGE DIR: ', dir);
 };
 
-const mocha = require('mocha');
-console.log(mocha);
-const path = require('path');
-console.log('###');
-console.log('###');
-console.log(path);
-console.log('###');
-console.log('###');
+process.browser = true;
+process.stdout = {};
+
+const originalrequire = require('original-require');
+originalrequire.cache = {};

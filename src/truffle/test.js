@@ -14,9 +14,17 @@ const provider = new Web3.providers.HttpProvider('/testrpc/');
 const web3 = new Web3(provider);
 Promise.promisifyAll(web3.eth, {suffix: 'Promise'});
 
-console.log(test);
+async function test(loggerCallback) {
+  // TODO: Don't duplicate this
+  const callLogger = (...args) => {
+    loggerCallback(...args);
+  };
+  const loggers = ['debug', 'error', 'info', 'log', 'warn'];
+  const logger = loggers.reduce((res, l) => {
+    res[l] = callLogger;
+    return res;
+  }, {});
 
-async function test() {
   const accounts = await web3.eth.getAccountsPromise();
   let tests = await dir(TESTS_PATH);
   tests = tests.map(t => `${TESTS_PATH}${t}`);
@@ -29,7 +37,7 @@ async function test() {
         test_files: tests,
         network: 'dev',
         network_id: 42,
-        logger: console,
+        logger,
         networks: {
           dev: {
             network_id: 42,

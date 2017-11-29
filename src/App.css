@@ -1,5 +1,32 @@
 .App {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
   text-align: center;
+}
+
+.App-filebrowser {
+  grid-column: 1;
+  grid-row: 1 / 5;
+}
+
+.App-header {
+  grid-column: 1 / 10;
+  grid-row: 1;
+  background-color: #222;
+  color: white;
+}
+
+.App-body {
+  grid-column: 2 / 10;
+  grid-row: 2 / 5;
+}
+
+.App-drawer{
+  grid-column: 1 / 10;
+  grid-row: 5;
+  background-color: #222;
+  color: white;
 }
 
 .App-logo {
@@ -7,12 +34,7 @@
   height: 80px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
+
 
 .App-title {
   font-size: 1.5em;

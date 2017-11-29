@@ -13,7 +13,16 @@ const provider = new Web3.providers.HttpProvider('/testrpc/');
 const web3 = new Web3(provider);
 Promise.promisifyAll(web3.eth, {suffix: 'Promise'});
 
-async function runMigration() {
+async function runMigration(loggerCallback) {
+  const callLogger = (...args) => {
+    console.log('migration: ', args);
+    loggerCallback(...args);
+  };
+  const loggers = ['debug', 'error', 'info', 'log', 'warn'];
+  const logger = loggers.reduce((res, l) => {
+    res[l] = callLogger;
+    return res;
+  }, {});
   const accounts = await web3.eth.getAccountsPromise();
   const resolver = new Resolver({
     working_directory: '/',
@@ -32,7 +41,7 @@ async function runMigration() {
         resolver,
         network: 'localhost',
         network_id: 42,
-        logger: console,
+        logger,
         from: accounts[0],
         reset: true,
       },

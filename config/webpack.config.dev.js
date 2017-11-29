@@ -78,7 +78,7 @@ module.exports = {
     // https://github.com/facebookincubator/create-react-app/issues/253
     modules: ['node_modules', paths.appNodeModules].concat(
       // It is guaranteed to exist because we tweak it in `env.js`
-      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
+      process.env.NODE_PATH.split(path.delimiter).filter(Boolean),
     ),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
@@ -92,10 +92,14 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      'original-require': path.join(__dirname, 'original-require.js'),
+      'module': path.join(__dirname, 'module.js'),
+      'mocha$' : path.join(__dirname, 'mocha.js'),
+      'path$' : path.join(__dirname, 'path.js'),
     },
     plugins: [
       new ServiceWorkerWebpackPlugin({
-        entry: path.join(__dirname, 'src/testrpc/server.js'),
+        entry: path.join(__dirname, '../src/testrpc/server.js'),
       }),
       // Prevents users from importing files from outside of src/ (or node_modules/).
       // This often causes confusion because we only process files within src/ with babel.
@@ -150,7 +154,6 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
@@ -217,28 +220,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.DefinePlugin({
-      mocha: function() {
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('mocha');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        console.log('####');
-        return { Mocha: require.resolve('mocha') };
-      },
-    }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -271,6 +252,7 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.ProvidePlugin({}),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
