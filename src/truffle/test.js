@@ -28,6 +28,15 @@ async function test(loggerCallback) {
   const accounts = await web3.eth.getAccountsPromise();
   let tests = await dir(TESTS_PATH);
   tests = tests.map(t => `${TESTS_PATH}${t}`);
+  const originalLog = console.log;
+  console.log = (...args) => {
+    if (window.testIsRunning) {
+      logger.log(...args);
+    } else {
+      originalLog(...args);
+    }
+  };
+  window.testIsRunning = true;
   return new Promise((f, r) => {
     ttest.run(
       {
@@ -49,12 +58,14 @@ async function test(loggerCallback) {
             gas: 500000,
           },
         },
-        provider: 'does not matter???',
+        provider: provider,
       },
       (err, succ) => {
+        window.testIsRunning = false;
+        console.log = originalLog;
         if (err) {
           r(err);
-          console.log('ERR: ', err);
+          console.error(err);
           return;
         }
         f(succ);

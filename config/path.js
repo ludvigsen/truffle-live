@@ -7,10 +7,6 @@ const res = Object.keys(path).reduce((obj, key) => {
       if (path[key] && path[key].apply) {
         return path[key].apply(this, arguments);
       }
-      console.log('WHAT THE ACTUAL FUCK', key);
-      console.log('WHAT THE ACTUAL FUCK', backup);
-      console.log('WHAT THE ACTUAL FUCK', backup[key]);
-      console.log('WHAT THE ACTUAL FUCK', backup[key].apply);
       return backup[key].apply(this, arguments);
     };
   } else {

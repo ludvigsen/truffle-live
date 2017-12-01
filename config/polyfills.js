@@ -62,8 +62,6 @@ fs.writeFile = (path, content, encoding, cb) => {
 
 const originalReadFile = fs.readFile;
 fs.readFile = (path, encoding, cb) => {
-  console.log('PATH: ', path, encoding, cb);
-
   if (typeof encoding === 'function') {
     cb = encoding;
     encoding = 'utf8';
@@ -71,26 +69,20 @@ fs.readFile = (path, encoding, cb) => {
   if (window.currentDir && path.charAt(0) === '.') {
     path = `${window.currentDir}/${path.substr(1)}`;
   }
-  console.log('READING ', path);
   originalReadFile(path, encoding, cb);
 };
 
 fs.readFileSync = path => {
-  console.log('READ FILE SYNC: ', path);
   if (window.currentDir && path.charAt(0) === '.') {
     path = `${window.currentDir}/${path.substr(1)}`;
   }
-  console.log('READ FILE SYNC: ', path);
-  console.log('fileCache: ', fileCache);
   if (fileCache[path]) {
-    console.log('IN CACHE!!');
     return fileCache[path];
   }
   throw 'No such file or directory';
 };
 
 fsExtra.outputFile = (output_path, content, encoding, cb) => {
-  console.log('OUTPUT FILE: ', output_path, content, encoding);
   return fs.writeFile(output_path, content, cb);
 };
 
@@ -102,13 +94,10 @@ dir.files = (dir, cb) => {
 };
 
 const soljson = require('solc/soljson');
-console.log('soljson: ', soljson);
 Object.assign(soljson, window.Module);
-console.log('soljson: ', soljson);
 
 process.chdir = dir => {
   window.currentDir = dir;
-  console.log('CHANGE DIR: ', dir);
 };
 
 process.browser = true;

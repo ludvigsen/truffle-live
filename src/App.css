@@ -1,32 +1,48 @@
 .App {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
+  //grid-template-columns: repeat(10, 1fr);
+  //grid-template-rows: repeat(5, 1fr);
+  //grid-gap: 10px;
   text-align: center;
+  width: 100vw;
+  height: 100vh;
+  grid-template-rows: [row1] 10% [row2] auto [row3] 25% [end];
+  grid-template-columns: [col1] 20% [col2] auto [end];
+  grid-template-areas: 
+  "header header"
+    "sidebar body"
+    "footer footer";
 }
 
 .App-filebrowser {
-  grid-column: 1;
-  grid-row: 1 / 5;
+  grid-area: sidebar;
 }
 
 .App-header {
-  grid-column: 1 / 10;
-  grid-row: 1;
+  grid-area: header;
   background-color: #222;
   color: white;
+}
+
+.App-button {
+  border: none;
+  font-size: 24px;
+  margin-top: 6px;
+  background: #258;
+  color: white;
+  padding: 10px;
+  margin-right: 10px;
 }
 
 .App-body {
-  grid-column: 2 / 10;
-  grid-row: 2 / 5;
+  grid-area: body;
 }
 
 .App-drawer{
-  grid-column: 1 / 10;
-  grid-row: 5;
+  grid-area: footer;
   background-color: #222;
   color: white;
+  overflow: scroll
 }
 
 .App-logo {

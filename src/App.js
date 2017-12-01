@@ -8,6 +8,7 @@ import {dir, readFile, writeFile} from './truffle/files';
 import migrate from './truffle/migrate';
 import compile from './truffle/compile';
 import test from './truffle/test';
+import * as ansi from 'ansicolor';
 
 class App extends Component {
   constructor() {
@@ -84,9 +85,45 @@ class App extends Component {
     console.log('compiled!!!!!!');
   }
 
-  onTestEvent(event) {
+  onTestEvent(...args) {
+    let parsed = args
+      .map(a => {
+        try {
+          if (typeof a === 'string') {
+            return a;
+          }
+          return JSON.stringify(a);
+        } catch (e) {
+          return '';
+        }
+      })
+      .join(' ');
+    if (args && args.length > 0 && args[0].indexOf('%') !== -1) {
+      let [first, ...rest] = args;
+      parsed = first;
+      while (parsed.indexOf('%') !== -1) {
+        let [firstArgument, ...restOfArguments] = rest;
+        rest = restOfArguments;
+        parsed = parsed.replace(/%./, firstArgument);
+      }
+      const colors = ansi.parse(parsed);
+      colors.spans.map(c => {
+        console.info(c);
+        console.info(`{${c.css}}`);
+      });
+      parsed = colors.spans.map(c => {
+        console.info(c);
+        const parsedCss = c.css.substring(0, c.css.length - 2);
+        let [right, left] = parsedCss.split(':');
+        return (
+          <span style={JSON.parse(`{"${right}":"${left}"}`)}>{c.text}</span>
+        );
+      });
+    }
+    console.info(parsed);
+    //console.info(ansi.parse(parsed));
     this.setState({
-      events: [...this.state.events, event],
+      events: [...this.state.events, parsed],
     });
   }
 
@@ -116,7 +153,17 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header" />
+        <header className="App-header">
+          <button className="App-button" onClick={this.onRunMigrations}>
+            Migrate
+          </button>
+          <button className="App-button" onClick={this.onCompile}>
+            Compile
+          </button>
+          <button className="App-button" onClick={this.onTest}>
+            Test
+          </button>
+        </header>
         <TreeBrowser
           className="App-filebrowser"
           onClick={this.onSelectFile}
@@ -138,9 +185,6 @@ class App extends Component {
           }}
         />
         <div className="App-body">
-          <button onClick={this.onRunMigrations}>Migrate</button>
-          <button onClick={this.onCompile}>Compile</button>
-          <button onClick={this.onTest}>Test</button>
           <AceEditor
             value={this.state.file.content}
             onChange={this.onChange}

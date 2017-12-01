@@ -7,7 +7,7 @@ process.versions = {
 };
 
 process.binding = name => {
-  console.log('name: ', name);
+  //console.log('name: ', name);
   return {fs: {}, os: {errno: {}}};
 };
 
@@ -16,7 +16,7 @@ const fs = require('fs');
 
 Object.assign(fs, fsPolyfill);
 fs.rmdirSync = () => {};
-console.log('FS: ', fs);
+//console.log('FS: ', fs);
 fs.mkdir('/tmp');
 const Provider = require('ganache-core/lib/provider');
 
@@ -26,7 +26,7 @@ let provider;
 self.addEventListener('install', function(event) {
   return new Promise(async (f, r) => {
     provider = new Provider({network_id: 42});
-    console.log('PROVIDER: ', provider);
+    //console.log('PROVIDER: ', provider);
     await new Promise(f => setTimeout(f, 5000));
     f();
   });
@@ -46,7 +46,7 @@ self.addEventListener('fetch', function(event) {
         event.request
           .json()
           .then(payload => {
-            console.log('DATA: ', payload);
+            //console.log('DATA: ', payload);
             provider.sendAsync(payload, (err, result) => {
               if (err) {
                 r(err);
@@ -73,6 +73,6 @@ self.addEventListener('fetch', function(event) {
       }),
     );
   }
-  console.log('event.request.url: ', event.request.url);
+  //console.log('event.request.url: ', event.request.url);
   return fetch(event.request);
 });

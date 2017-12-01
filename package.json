@@ -94,6 +94,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "ansicolor": "^1.1.71",
     "babel-plugin-add-module-exports": "^0.2.1",
     "browserify-fs": "^1.0.0",
     "ganache-core": "^2.0.0",

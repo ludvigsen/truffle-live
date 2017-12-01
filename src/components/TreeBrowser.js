@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 
 const Tree = props => {
-  console.log(props);
   const onClick = () => {
-    console.log('ASDF', props);
     if (props.onClick) {
       props.onClick(props.tree);
     }
@@ -28,7 +26,6 @@ const Tree = props => {
 };
 
 const TreeBrowser = props => {
-  console.log('TEST', props);
   return <Tree {...props} />;
 };
 

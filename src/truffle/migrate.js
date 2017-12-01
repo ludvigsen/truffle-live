@@ -1,12 +1,15 @@
 /*global location*/
 /*eslint no-restricted-globals: ["error", "event", "fdescribe"]*/
 import {MIGRATIONS_PATH, BUILD_CONTRACTS_PATH} from './paths';
+import {dir, readFile} from './files';
 
 const Promise = require('bluebird');
 const migrate = require('truffle-migrate');
 const Artifactor = require('truffle-artifactor');
 const Resolver = require('truffle-resolver');
 const Web3 = require('web3');
+
+const fs = require('fs');
 
 const artifactor = new Artifactor(BUILD_CONTRACTS_PATH);
 const provider = new Web3.providers.HttpProvider('/testrpc/');
@@ -45,11 +48,22 @@ async function runMigration(loggerCallback) {
         from: accounts[0],
         reset: true,
       },
-      async err => {
+      async (err, res) => {
         if (err) {
           r(err);
           return;
         }
+        // Update fileCache with newly migrated contracts...
+        const fileCache = JSON.parse(localStorage.getItem('fileCache'));
+        const migrations = await dir('/build/contracts/');
+        await Promise.all(
+          migrations.map(async migration => {
+            const file = await readFile(`/build/contracts/${migration}`);
+            fileCache[`/build/contracts/${migration}`] = file;
+          }),
+        );
+        console.log('FILE CACHE: ', fileCache);
+        localStorage.setItem('fileCache', JSON.stringify(fileCache));
         f();
       },
     );
