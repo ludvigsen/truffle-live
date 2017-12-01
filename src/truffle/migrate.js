@@ -12,7 +12,7 @@ const Web3 = require('web3');
 const fs = require('fs');
 
 const artifactor = new Artifactor(BUILD_CONTRACTS_PATH);
-const provider = new Web3.providers.HttpProvider('/testrpc/');
+const provider = new Web3.providers.HttpProvider('testrpc/');
 const web3 = new Web3(provider);
 Promise.promisifyAll(web3.eth, {suffix: 'Promise'});
 

@@ -107,10 +107,6 @@ class App extends Component {
         parsed = parsed.replace(/%./, firstArgument);
       }
       const colors = ansi.parse(parsed);
-      colors.spans.map(c => {
-        console.info(c);
-        console.info(`{${c.css}}`);
-      });
       parsed = colors.spans.map(c => {
         console.info(c);
         const parsedCss = c.css.substring(0, c.css.length - 2);
@@ -120,8 +116,6 @@ class App extends Component {
         );
       });
     }
-    console.info(parsed);
-    //console.info(ansi.parse(parsed));
     this.setState({
       events: [...this.state.events, parsed],
     });
@@ -132,14 +126,11 @@ class App extends Component {
       events: [],
     });
     await test(this.onTestEvent);
-    console.log('test!!!!!!');
   }
 
   onSelectFile(file) {
-    console.log('SELECT FILE: ', file);
     if (file.type === 'file') {
       const content = readFile(file.path).then(content => {
-        console.log('file: ', file);
         this.setState({
           file: {
             ...file,

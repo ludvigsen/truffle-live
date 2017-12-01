@@ -94,9 +94,14 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
+      fs: 'browserify-fs',
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      'original-require': path.join(__dirname, 'original-require.js'),
+      module: path.join(__dirname, 'module.js'),
+      mocha$: path.join(__dirname, 'mocha.js'),
+      path$: path.join(__dirname, 'path.js'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
